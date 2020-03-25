@@ -1,0 +1,702 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "The API for Zerobase's Smart Tracing system.",
+    "version" : "1.0.0",
+    "title" : "Zerobase Smart Tracing",
+    "contact" : {
+      "email" : "info@zerobase.io"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "https://github.com/zerobase-io/smart-tracing-api/blob/master/LICENSE"
+    }
+  },
+  "tags" : [ {
+    "name" : "organization",
+    "description" : "All operations pertaining to Organizations."
+  }, {
+    "name" : "site",
+    "description" : "All operations pertaining to Sites."
+  }, {
+    "name" : "scannable",
+    "description" : "All operations pertaining to Scannables."
+  }, {
+    "name" : "device",
+    "description" : "All operations pertaining to Devices."
+  }, {
+    "name" : "user",
+    "description" : "All operations pertaining to Users."
+  }, {
+    "name" : "check-in",
+    "description" : "All operations pertaining to CheckIns"
+  }, {
+    "name" : "models",
+    "description" : "A set of endpoints that return dynamic data about models, such as valid values for an enum."
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/organizations" : {
+      "post" : {
+        "tags" : [ "organization" ],
+        "summary" : "Creates a new Organization from the request body.",
+        "description" : "",
+        "operationId" : "createOrg",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "organization",
+          "description" : "The new Organization to be created.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Organization"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "The ID of the new Organization."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{organizationId}/multiple-sites-setting" : {
+      "put" : {
+        "tags" : [ "organization" ],
+        "summary" : "Updated the hasMultipleSites property of the specified Organization.",
+        "description" : "",
+        "operationId" : "updateOrgMultiSiteSetting",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "organizationId",
+          "in" : "path",
+          "description" : "The Organization whose hasMultipleSites setting should be updated.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "hasMultipleSites",
+          "in" : "body",
+          "description" : "The new value for hasMultipleSites.",
+          "required" : true,
+          "schema" : {
+            "type" : "boolean"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful operation."
+          }
+        }
+      }
+    },
+    "/organizations/{organizationId}/sites" : {
+      "post" : {
+        "tags" : [ "organization" ],
+        "summary" : "Creates a new Site under the specified Organization.",
+        "description" : "",
+        "operationId" : "createSite",
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "organizationId",
+          "in" : "path",
+          "description" : "The Organization to which the new Site should be added.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "site",
+          "in" : "body",
+          "description" : "The new Site to be created.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Site"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "The ID of the new Site."
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The specified Organization doesn't exist."
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "organization", "site" ],
+        "summary" : "Returns the sites for the specified Organization.",
+        "description" : "",
+        "operationId" : "getSites",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "organizationId",
+          "in" : "path",
+          "description" : "The Organization whose sites should be returned.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "description" : "The name of the site."
+                  },
+                  "id" : {
+                    "type" : "string",
+                    "description" : "The ID of the site."
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The specified Organization doesn't exist."
+          }
+        }
+      }
+    },
+    "/organizations/{organizationId}/sites/{siteId}/scannables" : {
+      "post" : {
+        "tags" : [ "organization", "site", "scannable" ],
+        "summary" : "Creates a new Scannable for the specified Site.",
+        "description" : "",
+        "operationId" : "getScannables",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "organizationId",
+          "in" : "path",
+          "description" : "The Organization that owns the specified Site.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "siteId",
+          "in" : "path",
+          "description" : "The Site to which the new Scannable should be added.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "scannable",
+          "in" : "body",
+          "description" : "The new Scannable to be created.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Scannable"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "The ID of the new Scannable."
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "The specified Organization or Site doesn't exist."
+          }
+        }
+      }
+    },
+    "/devices" : {
+      "post" : {
+        "tags" : [ "device" ],
+        "summary" : "Creates a new Device.",
+        "description" : "",
+        "operationId" : "createDeviceWithoutUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "device",
+          "in" : "body",
+          "description" : "The new Device to be created.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Device"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "The ID of the new User."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Creates a new User.",
+        "description" : "",
+        "operationId" : "createUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user",
+          "in" : "body",
+          "description" : "The new User to be created.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "The ID of the new User."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/devices" : {
+      "post" : {
+        "tags" : [ "user", "device" ],
+        "summary" : "Creates a new Device for an existing User",
+        "description" : "",
+        "operationId" : "createDeviceWithUser",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "The ID of the User that the new Device will belong to.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "device",
+          "in" : "body",
+          "description" : "The Device associated with the user based on user id",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Device"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "The ID of the new Device."
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "User doesn't exist"
+          }
+        }
+      }
+    },
+    "/devices/{deviceId}/check-ins" : {
+      "post" : {
+        "tags" : [ "device", "check-in" ],
+        "summary" : "Creates a new CheckIn for the specified Device.",
+        "description" : "",
+        "operationId" : "createCheckIn",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "deviceId",
+          "in" : "path",
+          "description" : "The ID of the Device that the new CheckIn will belong to.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "checkIn",
+          "in" : "body",
+          "description" : "The new CheckIn to be created.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/CheckIn"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "The ID of the new CheckIn."
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Device doesn't exist."
+          }
+        }
+      }
+    },
+    "/devices/{deviceId}/check-ins/{checkInId}/location" : {
+      "put" : {
+        "tags" : [ "device", "check-in" ],
+        "summary" : "Updates the location of an existing CheckIn.",
+        "description" : "",
+        "operationId" : "updateCheckInLocation",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "deviceId",
+          "in" : "path",
+          "description" : "The ID of the Device that the specified CheckIn belongs to.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "checkInId",
+          "in" : "path",
+          "description" : "The ID of the CheckIn whose location should be updated.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "location",
+          "in" : "body",
+          "description" : "The new location for the specified CheckIn.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Location"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Successful operation."
+          },
+          "404" : {
+            "description" : "Device or CheckIn doesn't exist."
+          }
+        }
+      }
+    },
+    "/users/{userId}/summary" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Dumps the information we have on a User for GDPR compliance reasons.",
+        "description" : "",
+        "operationId" : "userSummary",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "The ID of the User whose information should be returned.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation."
+          },
+          "404" : {
+            "description" : "User doesn't exist."
+          }
+        }
+      }
+    },
+    "/users/{userId}" : {
+      "delete" : {
+        "tags" : [ "user" ],
+        "summary" : "Deletes the specified User.",
+        "description" : "",
+        "operationId" : "deleteUser",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "The ID of the User to be deleted.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Successful operation."
+          },
+          "404" : {
+            "description" : "User doesn't exist."
+          }
+        }
+      }
+    },
+    "/models/site-types" : {
+      "get" : {
+        "tags" : [ "models" ],
+        "summary" : "Returns the valid combinations for Site.type in the form of an object whose properties are the categories and whose values are the appropriate subcategories for the parent category.",
+        "description" : "",
+        "operationId" : "getSiteTypes",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "category" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              },
+              "example" : {
+                "HEALTH" : [ "DOCTOR_OFFICE", "HOSPITAL", "TESTING_CENTER" ],
+                "COMMUNITY_TOUCHPOINT" : [ "CHURCH", "POST_OFFICE", "MARKET" ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/models/scannable-types" : {
+      "get" : {
+        "tags" : [ "models" ],
+        "summary" : "Returns the valid values for Scannable.type in the form of an array.",
+        "description" : "",
+        "operationId" : "getScannableTypes",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation.",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "description" : "Valid values for Scannable.type. Only QR_CODE at the moment, but more will likely be added."
+              },
+              "example" : [ "QR_CODE", "BLE", "NFC" ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Organization" : {
+      "type" : "object",
+      "description" : "An incorporated entity which owns one or more sites.",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "The name of the organization.",
+          "example" : "Zerobase Inc."
+        },
+        "contactInfo" : {
+          "$ref" : "#/definitions/ContactInfo"
+        },
+        "address" : {
+          "type" : "string",
+          "description" : "The primary address for the whole organization, such as the street address of their headquarters or the address of a P.O. box."
+        },
+        "hasMultipleSites" : {
+          "type" : "boolean",
+          "default" : true,
+          "description" : "True if the organization has multiple testing sites, false otherwise."
+        },
+        "hasTestingFacilities" : {
+          "type" : "boolean",
+          "default" : false,
+          "description" : "True if the organization represents a party who we have confirmed is able to perform SARS-COV-2 testing, and should thus have the right to confirm test results."
+        }
+      },
+      "required" : [ "name", "contactInfo", "address" ]
+    },
+    "Site" : {
+      "type" : "object",
+      "description" : "A singular location or building.",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "The name of the site.",
+          "example" : "John & Jane's Family Pharmacy"
+        },
+        "active" : {
+          "type" : "boolean",
+          "default" : true
+        },
+        "location" : {
+          "$ref" : "#/definitions/Location"
+        },
+        "isTesting" : {
+          "type" : "boolean",
+          "default" : false,
+          "description" : "True if the site is a facility (meaning they are verified as being able to run tests for SARS-COV-2)."
+        },
+        "siteManagerContactInfo" : {
+          "$ref" : "#/definitions/ContactInfo"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "A slash-seperated string representing the category of the site.",
+          "example" : "HEALTH/DOCTOR_OFFICE"
+        }
+      },
+      "required" : [ "location", "type" ]
+    },
+    "Scannable" : {
+      "type" : "object",
+      "description" : "Something which a user can scan, be it a QR code, a BLE beacon or an NFC tag.",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "QR_CODE" ]
+        },
+        "singleUse" : {
+          "type" : "boolean",
+          "default" : false
+        }
+      },
+      "required" : [ "type" ]
+    },
+    "Device" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "fingerprint" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "fingerprint" ]
+    },
+    "User" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "contact" : {
+          "type" : "object",
+          "properties" : {
+            "phone" : {
+              "type" : "string",
+              "description" : "The user's phone number for sending SMS notifications."
+            },
+            "email" : {
+              "type" : "string",
+              "description" : "The user's email address for sending email notifications."
+            }
+          }
+        },
+        "deviceId" : {
+          "type" : "string",
+          "description" : "The ID of the device that belongs to this user."
+        }
+      },
+      "required" : [ "deviceId" ]
+    },
+    "CheckIn" : {
+      "type" : "object",
+      "description" : "An object that represents an instance of a user checking in to a Scannable.",
+      "properties" : {
+        "scannedId" : {
+          "type" : "string",
+          "description" : "The ID of the Scannable or Device that was scanned."
+        },
+        "type" : {
+          "type" : "string",
+          "enum" : [ "DEVICE_TO_DEVICE", "DEVICE_TO_SCANNABLE" ]
+        },
+        "location" : {
+          "$ref" : "#/definitions/Location"
+        }
+      },
+      "required" : [ "scannedId", "type" ]
+    },
+    "ContactInfo" : {
+      "type" : "object",
+      "description" : "Contact information for an Organization/Site or individual who has the right to represent one of the same.",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string",
+          "format" : "E.164",
+          "description" : "The primary phone number for the organization.",
+          "example" : "+15551234567"
+        },
+        "email" : {
+          "type" : "string",
+          "description" : "The primary email for the organization.",
+          "example" : "info@zerobase.io"
+        },
+        "contactName" : {
+          "type" : "string",
+          "description" : "The name of the individual who is our primary point of contact.",
+          "example" : "John Doe"
+        }
+      },
+      "required" : [ "phone", "email", "contactName" ]
+    },
+    "Location" : {
+      "type" : "object",
+      "description" : "A location comprised of a latitude and longitude.",
+      "properties" : {
+        "lat" : {
+          "type" : "string",
+          "example" : "4.5454"
+        },
+        "long" : {
+          "type" : "string",
+          "example" : "-12.34567"
+        }
+      },
+      "required" : [ "lat", "long" ]
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/zerobase/zerobase-api/1.0.0"
+}
