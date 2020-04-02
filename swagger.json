@@ -573,10 +573,15 @@
         "siteManagerContactInfo" : {
           "$ref" : "#/definitions/ContactInfo"
         },
-        "type" : {
+        "category" : {
           "type" : "string",
-          "description" : "A slash-seperated string representing the category of the site.",
-          "example" : "HEALTH/DOCTOR_OFFICE"
+          "description" : "The main category of the site",
+          "enum" : [ "BUSINESS", "FINANCIAL", "HEALTH" ]
+        },
+        "subcategory" : {
+          "type" : "string",
+          "descripton" : "The sub-category of the site, must be a valid subcategory of the main category",
+          "example" : "DOCTORS_OFFICE"
         }
       },
       "required" : [ "location", "type" ]
@@ -686,12 +691,12 @@
       "description" : "A location comprised of a latitude and longitude.",
       "properties" : {
         "lat" : {
-          "type" : "string",
-          "example" : "4.5454"
+          "type" : "number",
+          "example" : 4.5454
         },
         "long" : {
-          "type" : "string",
-          "example" : "-12.34567"
+          "type" : "number",
+          "example" : -12.34567
         }
       },
       "required" : [ "lat", "long" ]
