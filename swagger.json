@@ -584,7 +584,7 @@
           "example" : "DOCTORS_OFFICE"
         }
       },
-      "required" : [ "location", "type" ]
+      "required" : [ "cateogry", "subcategory" ]
     },
     "Scannable" : {
       "type" : "object",
