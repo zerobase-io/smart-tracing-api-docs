@@ -514,6 +514,40 @@
     }
   },
   "definitions" : {
+    "Address" : {
+      "type" : "object",
+      "properties" : {
+        "premise" : {
+          "type" : "string",
+          "description" : "The portion of an address that represents the location on a given thoroughfare.",
+          "example" : "100"
+        },
+        "thoroughfare" : {
+          "type" : "string",
+          "description" : "The name of the street/road that the premise value is on",
+          "example" : "Lafeyette Blvd"
+        },
+        "locality" : {
+          "type" : "string",
+          "description" : "The name of the town, city, etc",
+          "example" : "Chicago"
+        },
+        "administrativeArea" : {
+          "type" : "string",
+          "description" : "The name of the state, province, etc",
+          "example" : "Quebec"
+        },
+        "postalCode" : {
+          "type" : "string",
+          "example" : "90210"
+        },
+        "country" : {
+          "type" : "string",
+          "description" : "3-letter ISO country code",
+          "example" : "USA"
+        }
+      }
+    },
     "Organization" : {
       "type" : "object",
       "description" : "An incorporated entity which owns one or more sites.",
@@ -530,7 +564,7 @@
           "$ref" : "#/definitions/ContactInfo"
         },
         "address" : {
-          "type" : "string",
+          "$ref" : "#/definitions/Address",
           "description" : "The primary address for the whole organization, such as the street address of their headquarters or the address of a P.O. box."
         },
         "hasMultipleSites" : {
@@ -580,7 +614,7 @@
         },
         "subcategory" : {
           "type" : "string",
-          "descripton" : "The sub-category of the site, must be a valid subcategory of the main category",
+          "description" : "The sub-category of the site, must be a valid subcategory of the main category",
           "example" : "DOCTORS_OFFICE"
         }
       },
